@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Softmonster's GitHub Profile</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f9;
+      color: #333;
+    }
+    header {
+      background: #333;
+      color: #fff;
+      padding: 10px 20px;
+      text-align: center;
+    }
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    .profile {
+      text-align: center;
+    }
+    .profile img {
+      border-radius: 50%;
+      width: 150px;
+      height: 150px;
+    }
+    h2 {
+      margin-top: 0;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      background: #f9f9f9;
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 4px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    a {
+      text-decoration: none;
+      color: #007bff;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Softmonster's GitHub Profile</h1>
+  </header>
+  <div class="container">
+    <div class="profile" id="profile">
+      <img src="" alt="Profile Picture" id="avatar">
+      <h2 id="name"></h2>
+      <p id="bio"></p>
+      <p>
+        <strong>Followers:</strong> <span id="followers"></span>
+        &nbsp;|&nbsp;
+        <strong>Following:</strong> <span id="following"></span>
+        &nbsp;|&nbsp;
+        <strong>Public Repos:</strong> <span id="repos-count"></span>
+      </p>
+      <a id="profile-link" href="#" target="_blank">View GitHub Profile</a>
+    </div>
+    <h3>Repositories</h3>
+    <ul id="repos"></ul>
+  </div>
+  <script>
+    const username = 'Softmonster'; // Replace with your GitHub username
+    const apiUrl = `https://api.github.com/users/${username}`;
+    const reposUrl = `https://api.github.com/users/${username}/repos`;
+
+    async function fetchGitHubData() {
+      try {
+        // Fetch profile data
+        const profileResponse = await fetch(apiUrl);
+        const profileData = await profileResponse.json();
+
+        document.getElementById('avatar').src = profileData.avatar_url;
+        document.getElementById('name').textContent = profileData.name || profileData.login;
+        document.getElementById('bio').textContent = profileData.bio || 'No bio available.';
+        document.getElementById('followers').textContent = profileData.followers;
+        document.getElementById('following').textContent = profileData.following;
+        document.getElementById('repos-count').textContent = profileData.public_repos;
+        document.getElementById('profile-link').href = profileData.html_url;
+
+        // Fetch repositories
+        const reposResponse = await fetch(reposUrl);
+        const reposData = await reposResponse.json();
+
+        const reposList = document.getElementById('repos');
+        reposList.innerHTML = '';
+        reposData.forEach(repo => {
+          const listItem = document.createElement('li');
+          listItem.innerHTML = `
+            <strong><a href="${repo.html_url}" target="_blank">${repo.name}</a></strong>
+            <p>${repo.description || 'No description available.'}</p>
+            <p><strong>Stars:</strong> ${repo.stargazers_count} | <strong>Forks:</strong> ${repo.forks}</p>
+          `;
+          reposList.appendChild(listItem);
+        });
+      } catch (error) {
+        console.error('Error fetching GitHub data:', error);
+        alert('Failed to load GitHub data. Please check the console for details.');
+      }
+    }
+
+    fetchGitHubData();
+  </script>
+</body>
+</html>
