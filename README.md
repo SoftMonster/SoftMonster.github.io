@@ -7,3 +7,5 @@ I will write up notes on what I did some time.
 This is my custom profile page I made for myself using the technique.
 
 https://softmonster.github.io/
+
+Basically, you go to settings, then pages, then publish branch and click save. 
